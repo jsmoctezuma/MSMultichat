@@ -5,21 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSMultichat - PanelMC Chat</title>
     <style>
+        /* Aseguramos que HTML y BODY ocupen toda la altura */
+        html, body {
+            height: 100%; /* Ocupa el 100% de la altura del viewport */
+            margin: 0;
+            padding: 0;
+        }
+
         /* Estilos básicos para el chat */
         body {
             font-family: Arial, sans-serif;
             background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para ver a través en OBS */
             color: white;
-            margin: 0;
-            padding: 10px;
+            /* margin: 0; */ /* Ya cubierto por html, body */
+            /* padding: 10px; */ /* Lo moveremos al chat-container si es necesario */
             overflow: hidden; /* Oculta barras de desplazamiento si el contenido excede */
         }
         #chat-container {
             display: flex;
             flex-direction: column-reverse; /* Hace que los mensajes nuevos aparezcan abajo */
-            height: calc(100vh - 20px); /* Ajusta la altura al viewport */
+            height: 100%; /* Ahora ocupará el 100% de la altura del body */
+            /* Eliminamos el calc() porque ya body es 100% */
             overflow-y: auto; /* Permite desplazamiento si hay muchos mensajes */
-            padding: 10px;
+            padding: 10px; /* Padding para los mensajes dentro del contenedor */
+            box-sizing: border-box; /* Asegura que el padding no añada altura extra */
         }
         .chat-message {
             margin-bottom: 5px;
