@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSMultichat - Panemc Chat</title>
-    <style>
+    <title>MSMultichat - PanelMC Chat</title> <style>
         /* Estilos básicos para el chat */
         body {
             font-family: Arial, sans-serif;
@@ -58,7 +57,6 @@
 
             ws.onopen = () => {
                 console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
-                // --- ¡NUEVAS LÍNEAS AQUÍ! ---
                 // Suscribirse a mensajes de chat de Twitch
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
@@ -81,12 +79,11 @@
                         ]
                     }
                 }));
-                // --- FIN DE NUEVAS LÍNEAS ---
             };
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot:', data); // Para depuración, descomenta para ver todos los datos
+                console.log('Mensaje de Streamer.bot:', data); // ¡ESTA LÍNEA AHORA ESTÁ REALMENTE DESCOMENTADA Y EJECUTÁNDOSE!
 
                 // Verificamos si es un mensaje de chat de Twitch
                 if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
