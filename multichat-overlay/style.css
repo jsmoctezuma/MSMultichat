@@ -1,0 +1,207 @@
+* {
+	margin: 0;
+	padding: 0;
+	--margin: 40px;
+	--border-radius: 20px;
+	/* --line-spacing: 1.7em; */
+}
+
+body {
+	overflow: hidden;
+}
+
+html {
+	width: 100vw;
+	height: 100vh;
+	scroll-behavior: smooth;
+	/* background: #000000d9; */
+	font-size: 30px;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+	color: white;
+	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+	overflow-wrap: break-word;
+}
+
+#statusContainer {
+	font-weight: 500;
+	font-size: 30px;
+	text-align: center;
+	background-color: #D12025;
+	color: white;
+	padding: 10px;
+	border-radius: 10px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#mainContainer {
+	position: absolute;
+	height: calc(100% - 2 * var(--margin));
+	width: calc(100% - 2 * var(--margin));
+	margin: var(--margin);
+}
+
+#messageList {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column-reverse; /* Arrange items from bottom up */
+	gap: 10px;
+	transition: all 0.2s ease-in-out;
+}
+
+#messageList.scroll-direction-0 { /* From top down */
+	flex-direction: column;
+	top: 0;
+}
+
+#messageList.scroll-direction-1 { /* From bottom up */
+	flex-direction: column-reverse;
+	bottom: 0;
+}
+
+.chatMessageItem {
+	width: 100%;
+	transform-origin: bottom;
+	transition: opacity 0.5s ease; /* Add transition for opacity */
+	animation: slideIn 0.5s ease-out; /* Add animation for new messages */
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateY(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.chatMessageItem #card {
+	padding: 10px 20px;
+	border-radius: var(--border-radius);
+	word-wrap: break-word; /* Ensure long words break */
+	overflow-wrap: break-word; /* Ensure long words break */
+	white-space: normal; /* Allow normal line breaks */
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.chatMessageItem #header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 5px;
+}
+
+.chatMessageItem #header #platform img {
+	height: 35px;
+}
+
+.chatMessageItem #header #avatar {
+	border-radius: 50%;
+	height: 35px;
+	overflow: hidden;
+}
+
+.chatMessageItem #header #avatar img {
+	height: 35px;
+	border-radius: 50%;
+}
+
+.chatMessageItem #header #badges {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+}
+
+.chatMessageItem #header #badges img {
+	height: 25px;
+}
+
+.chatMessageItem #header #username {
+	font-weight: bold;
+}
+
+.chatMessageItem #header #pronouns {
+	color: #ffffff90;
+	font-size: 0.8em;
+}
+
+.chatMessageItem #header #timestamps {
+	color: #ffffff90;
+	font-size: 0.8em;
+	margin-left: auto; /* Push timestamps to the right */
+}
+
+.chatMessageItem #content {
+	padding-top: 5px;
+	line-height: var(--line-spacing);
+}
+
+.chatMessageItem #image {
+	width: 100%;
+	border-radius: var(--border-radius);
+	margin-top: 10px;
+}
+
+
+/* Platforms */
+.announcementRed {
+	background: linear-gradient(#b83c31BF, #ff5748BF) !important;
+}
+
+.announcementBlue {
+	background: linear-gradient(#1f4e79BF, #5e84a2BF) !important;
+}
+
+.announcementGreen {
+	background: linear-gradient(#01da86BF, #55bee4BF) !important;
+}
+
+.announcementOrange {
+	background: linear-gradient(#feb419BF, #e1df00BF) !important;
+}
+
+.announcementPurple {
+	background: linear-gradient(#9548ffBF, #fc74e6BF) !important;
+}
+
+.twitch {
+	background: linear-gradient(#6d5ca1bf, #9146ffBF) !important;
+}
+
+.youtube {
+	background: linear-gradient(#FF6C60BF, #FF0707BF) !important;
+}
+
+.streamlabs {
+	background: linear-gradient(#73dabbbf, #397765bf) !important;
+}
+
+.streamelements {
+	background: linear-gradient(#263b8abf, #0a112abf) !important;
+}
+
+.patreon {
+	background: linear-gradient(#c76633bf, #fd5e0abf) !important;
+}
+
+.kofi {
+	background: linear-gradient(#54c7eebf, #08c2ffbf) !important;
+}
+
+.tipeeeStream {
+	background: linear-gradient(#120e23bf, #5d192abf) !important;
+}
+
+.fourthwall {
+	background: linear-gradient(#466edbbf, #1c56f5bf) !important;
+}
+
+.blank {
+	background: rgba(0, 0, 0, 0.5) !important;
+}
