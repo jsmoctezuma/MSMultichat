@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (widgetContainer) {
             widgetContainer.style.display = 'block'; // Make iframe visible
 
-            // Construct the URL for the settings page
-            const settingsPageURL = '../../utilities/settings-page-builder/index.html'; // Path to your settings page
+            // Path to your settings page, relative to multichat-overlay/
+            const settingsPageURL = '../../utilities/settings-page-builder/index.html'; 
             const currentURL = window.location.href;
 
             let settingsJSONParam = '';
@@ -29,22 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 settingsJSONParam = `?settingsJson=${encodeURIComponent(urlParams.get('settingsJson'))}`;
             } else {
                 // Otherwise, construct the path to your default settings.json
-                // Assumes utilities/settings.json is two levels up from multichat-overlay/
-                let baseURL = currentURL.split('?')[0]; // Remove existing query params for base path
-                if (baseURL.endsWith("index.html")) {
-                    baseURL = baseURL.substring(0, baseURL.lastIndexOf('/'));
-                }
-                const parts = baseURL.split('/');
-                // Go up two directories from multichat-overlay to reach MSMultichat/
-                // Then append utilities/settings.json
-                const githubPagesRoot = parts.slice(0, parts.length - 1).join('/') + '/'; // Goes from /multichat-overlay/ to /MSMultichat/
-                settingsJSONParam = `?settingsJson=${encodeURIComponent(githubPagesRoot + 'utilities/settings.json')}`;
+                // --- CORRECCIÓN AQUÍ: Usar una ruta absoluta explícita para settings.json ---
+                const githubRepoName = 'MSMultichat'; // <--- ASEGÚRATE DE QUE ESTO COINCIDA EXACTAMENTE CON EL NOMBRE DE TU REPOSITORIO
+                const baseUrlForRepo = window.location.origin + '/' + githubRepoName + '/';
+                settingsJSONParam = `?settingsJson=${encodeURIComponent(baseUrlForRepo + 'utilities/settings.json')}`;
+                // ----------------------------------------------------------------------
             }
             
             // Pass the original widget URL (this overlay's URL) to the settings page
             // This allows the settings page to generate a new URL for the user to copy-paste back into OBS
             widgetURLParam = `&widgetURL=${encodeURIComponent(currentURL.split('?')[0])}`; // Only base URL without params
-
 
             // Set the src of the iframe
             widgetContainer.src = `${settingsPageURL}${settingsJSONParam}${widgetURLParam}`;
