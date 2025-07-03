@@ -86,7 +86,7 @@
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                // console.log('Mensaje de Streamer.bot:', data); // Para depuración, descomenta para ver todos los datos
+                console.log('Mensaje de Streamer.bot:', data); // Para depuración, descomenta para ver todos los datos
 
                 // Verificamos si es un mensaje de chat de Twitch
                 if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
