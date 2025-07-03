@@ -43,6 +43,8 @@
                 console.log('Mensaje de Streamer.bot:', data);
 
                 if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
+                    console.log('>>> ¡Condición de CHAT MESSAGE cumplida! Mostrando mensaje...'); // AÑADIR ESTA LÍNEA
+                    console.log('   Username:', data.data.displayName, 'Message:', data.data.message); // AÑADIR ESTA LÍNEA                    
                     displayMessage(data.data.displayName, data.data.message, 'Twitch');
                 }
             };
