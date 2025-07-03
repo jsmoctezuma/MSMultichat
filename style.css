@@ -33,11 +33,9 @@ html, body {
     color: yellow; /* Texto AMARILLO para contraste */
     font-size: 18px;
     font-weight: bold;
-    /* --- NUEVAS LÍNEAS PARA ASEGURAR VISIBILIDAD --- */
     opacity: 1 !important; /* Asegura que no tenga transparencia */
     visibility: visible !important; /* Asegura que no esté oculto */
     display: block !important; /* Asegura que se renderice como un bloque */
-    /* ----------------------------------------------- */
 }
 .username {
     font-weight: bold;
