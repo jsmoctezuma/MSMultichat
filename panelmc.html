@@ -5,39 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSMultichat - PanelMC Chat</title>
     <style>
-        /* Aseguramos que HTML y BODY ocupen toda la altura y estén posicionados */
+        /* Estilos generales para HTML y BODY */
         html, body {
-            height: 100%; /* Ocupa el 100% de la altura del viewport */
             margin: 0;
             padding: 0;
-            position: relative; /* Asegura que la posición relativa funcione para los hijos */
-            width: 100%; /* Ocupa el 100% del ancho del viewport */
+            width: 100%; /* Asegura que ocupe todo el ancho */
+            height: 100%; /* Asegura que ocupe toda la altura */
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para OBS */
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden; /* Oculta barras de desplazamiento del body */
         }
 
-        /* Estilos básicos para el chat */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente original */
-            color: white;
-            overflow: hidden; /* Oculta barras de desplazamiento si el contenido excede */
-        }
         #chat-container {
             display: flex;
             flex-direction: column-reverse; /* Hace que los mensajes nuevos aparezcan abajo */
-            height: 100%; /* Ocupará el 100% de la altura de su padre (body) */
-            width: 100%; /* Ocupará el 100% del ancho de su padre (body) */
+            
+            /* --- CAMBIO CLAVE AQUÍ: ALTURA FIJA EN PÍXELES --- */
+            height: 400px; /* ¡FORZAMOS UNA ALTURA DE 400 PÍXELES! */
+            width: 300px; /* ¡FORZAMOS UN ANCHO DE 300 PÍXELES! */
+            /* ------------------------------------------------ */
+
             padding: 10px;
-            box-sizing: border-box; /* Incluye el padding en el cálculo del 100% de la altura/ancho */
+            box-sizing: border-box; /* Incluye el padding en el cálculo del tamaño */
             overflow-y: auto; /* Permite desplazamiento si hay muchos mensajes */
-            /* NO necesitamos min-height si height: 100% funciona correctamente y el padre es 100% */
-            /* background-color: rgba(255, 255, 0, 0.1); /* Puedes descomentar para debug visual temporal */
-            /* border: 1px solid yellow; /* Puedes descomentar para debug visual temporal */
+            
+            /* Colores de depuración TEMPORALES para que lo veas */
+            background-color: rgba(0, 255, 0, 0.5); /* VERDE semitransparente */
+            border: 2px solid limegreen; /* Borde verde brillante */
         }
+
         .chat-message {
             margin-bottom: 5px;
             padding: 5px;
             border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 0, 0, 0.5); /* ROJO semitransparente */
+            color: yellow; /* Texto AMARILLO para contraste */
+            font-size: 18px;
+            font-weight: bold;
         }
         .username {
             font-weight: bold;
@@ -49,7 +54,6 @@
             vertical-align: middle;
             margin-right: 5px;
         }
-        /* Clases para colores de plataforma (ejemplos) */
         .twitch { color: #9146FF; }
         .youtube { color: #FF0000; }
     </style>
@@ -70,39 +74,29 @@
 
             ws.onopen = () => {
                 console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
-                // Suscribirse a mensajes de chat de Twitch
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
-                    id: 'chat-messages', // Un ID único para esta suscripción
-                    events: {
-                        Twitch: ['ChatMessage'] // Queremos mensajes de chat de Twitch
-                    }
+                    id: 'chat-messages',
+                    events: { Twitch: ['ChatMessage'] }
                 }));
-
-                // Suscribirse a otros eventos que puedas necesitar más tarde
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
-                    id: 'twitch-general', // Otro ID para otros eventos de Twitch
+                    id: 'twitch-general',
                     events: {
-                        Twitch: [
-                            'Follow', 'Subscribe', 'GiftSub', 'Cheer', 'Raid',
-                            'StreamOnline', 'StreamOffline',
-                            'ChannelPointReward', 'Redemption',
-                            'Hypetrain'
-                        ]
+                        Twitch: ['Follow', 'Subscribe', 'GiftSub', 'Cheer', 'Raid',
+                                 'StreamOnline', 'StreamOffline',
+                                 'ChannelPointReward', 'Redemption', 'Hypetrain']
                     }
                 }));
             };
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot:', data); // Esta línea está activa para depuración
+                console.log('Mensaje de Streamer.bot:', data);
 
-                // Verificamos si es un mensaje de chat de Twitch
                 if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
                     displayMessage(data.data.displayName, data.data.message, 'Twitch');
                 }
-                // TODO: Aquí agregaremos la lógica para YouTube, Kick y TikTok
             };
 
             ws.onclose = () => {
