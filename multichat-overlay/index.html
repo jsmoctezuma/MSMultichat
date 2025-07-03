@@ -1,65 +1,84 @@
 <!DOCTYPE html>
-<html style="--line-spacing: 1.7em; --animation-speed: 0.1s;">
+<html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiChat Overlay</title>
     <link rel="stylesheet" href="./style.css">
-    <script type="text/javascript" src="./streamerbot-client.js"></script>
-    <script type="text/javascript" src="./settings-loader.js"></script> 
-    <script type="text/javascript" src="./script.js"></script>
-</head>
+    <style>
+        /* Estilos básicos para manejar la visibilidad y el layout */
+        body {
+            margin: 0;
+            overflow: hidden; /* Evita barras de desplazamiento */
+            width: 100vw;
+            height: 100vh;
+            display: flex; /* Usamos flexbox para centrar y manejar contenido */
+            justify-content: center;
+            align-items: flex-end; /* El chat suele empezar desde abajo */
+            background: rgba(0, 0, 0, 0.85); /* Fondo por defecto del original */
+            font-size: 30px; /* Tamaño de fuente por defecto del original */
+        }
 
-<body style="font-size: 30px; background: rgba(0, 0, 0, 0.85);">
-    <div id="statusContainer" style="background: rgb(47, 183, 116); opacity: 0; transition: 2s;">Connected!</div>
+        /* Contenedor principal para el chat */
+        #mainContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex; /* Por defecto muestra el chat */
+            flex-direction: column;
+        }
+
+        /* El iframe donde se cargará la página de configuración */
+        #widgetContainer { /* Mantenemos este ID ya que settings-loader.js lo busca */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none; /* Oculto por defecto, se mostrará si la URL indica que es la página de configuración */
+        }
+
+        /* Contenedor para el estado de conexión de Streamer.bot */
+        #statusContainer {
+            background: rgb(47, 183, 116);
+            opacity: 0;
+            transition: 2s;
+            position: absolute; /* Posicionarlo por encima del chat/configuración */
+            top: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            padding: 5px 0;
+            z-index: 100; /* Asegura que esté por encima de otros contenidos */
+        }
+        /* Estilo para la lista de mensajes, puede ser sobrescrito por style.css */
+        #messageList {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* messages appear at the bottom */
+            overflow: hidden; /* hide scrollbar */
+        }
+    </style>
+</head>
+<body>
+    <div id="statusContainer">Connected!</div>
+
     <div id="mainContainer">
-        <iframe id="widgetContainer" style="width:100%; height:100%; border:none;"></iframe> 
         <div id="messageList" class="scroll-direction-1">
-        </div>
+            </div>
     </div>
 
-    <template id="messageTemplate">
-        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-            <div id="card" style="background: linear-gradient(rgba(109, 92, 161, 0.75), rgba(145, 70, 255, 0.75));">
-                <div id="header">
-                    <div id="platform"></div>
-                    <div id="avatar"></div>
-                    <div id="badges"></div>
-                    <div id="username">username</div>
-                    <div id="pronouns"></div>
-                    <div id="timestamps"></div>
-                </div>
-                <div id="content">message</div>
-            </div>
-        </div>
-    </template>
+    <iframe id="widgetContainer"></iframe>
 
-    <template id="alertTemplate">
-        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-            <div id="card">
-                <div id="header">
-                    <div id="icon"></div>
-                    <div id="title"></div>
-                </div>
-                <div id="content"></div>
-            </div>
-        </div>
-    </template>
+    <span id="unmute-label" style="display:none;">Click to unmute</span>
 
-    <template id="imageTemplate">
-        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-            <div id="card">
-                <div id="header">
-                    <div id="platform"></div>
-                    <div id="avatar"></div>
-                    <div id="badges"></div>
-                    <div id="username">username</div>
-                    <div id="pronouns"></div>
-                    <div id="timestamps"></div>
-                </div>
-                <img id="image" class="chatImage" src="" />
-            </div>
-        </div>
-    </template>
-
+    <script src="./streamerbot-client.js"></script>
+    <script src="./settings-loader.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>

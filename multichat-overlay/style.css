@@ -1,207 +1,175 @@
-* {
-	margin: 0;
-	padding: 0;
-	--margin: 40px;
-	--border-radius: 20px;
-	/* --line-spacing: 1.7em; */
-}
-
+/* Basic Reset & Body Styles */
 body {
-	overflow: hidden;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrollbars */
+    /* Font size, background, and font family are now set by script.js and inline styles in index.html */
 }
 
-html {
-	width: 100vw;
-	height: 100vh;
-	scroll-behavior: smooth;
-	/* background: #000000d9; */
-	font-size: 30px;
-	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-	color: white;
-	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-	overflow-wrap: break-word;
-}
-
+/* Status Container (e.g., Connected/Disconnected message) */
 #statusContainer {
-	font-weight: 500;
-	font-size: 30px;
-	text-align: center;
-	background-color: #D12025;
-	color: white;
-	padding: 10px;
-	border-radius: 10px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    background: #2fb774; /* Green for connected */
+    padding: 5px 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 100;
 }
 
+/* Main Chat Container */
 #mainContainer {
-	position: absolute;
-	height: calc(100% - 2 * var(--margin));
-	width: calc(100% - 2 * var(--margin));
-	margin: var(--margin);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Messages start from the bottom */
+    overflow: hidden; /* Hide scrollbar for messageList */
 }
 
+/* Message List - Handles individual messages */
 #messageList {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	display: flex;
-	flex-direction: column-reverse; /* Arrange items from bottom up */
-	gap: 10px;
-	transition: all 0.2s ease-in-out;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Messages stack vertically */
+    padding: 10px; /* Padding inside the chat area */
+    box-sizing: border-box; /* Include padding in width/height */
+    overflow: hidden; /* Ensure messages don't overflow */
+    justify-content: flex-end; /* Messages stack from bottom-up by default */
 }
 
-#messageList.scroll-direction-0 { /* From top down */
-	flex-direction: column;
-	top: 0;
+/* Scroll Direction - overrides justify-content for top-to-bottom */
+#messageList.scroll-direction-0 { /* Top to Bottom */
+    justify-content: flex-start;
 }
 
-#messageList.scroll-direction-1 { /* From bottom up */
-	flex-direction: column-reverse;
-	bottom: 0;
+#messageList.scroll-direction-1 { /* Bottom to Top (default) */
+    justify-content: flex-end;
 }
 
-.chatMessageItem {
-	width: 100%;
-	transform-origin: bottom;
-	transition: opacity 0.5s ease; /* Add transition for opacity */
-	animation: slideIn 0.5s ease-out; /* Add animation for new messages */
+/* Individual Chat Message */
+.chat-message {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.4); /* Slightly darker background for messages */
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* For hiding messages */
+    color: #ffffff; /* Default text color */
+    word-wrap: break-word; /* Break long words */
+    white-space: pre-wrap; /* Preserve whitespace and break lines */
 }
 
-@keyframes slideIn {
-	from {
-		transform: translateY(100%);
-		opacity: 0;
-	}
-	to {
-		transform: translateY(0);
-		opacity: 1;
-	}
+/* Platform Icon */
+.platform-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
 }
 
-.chatMessageItem #card {
-	padding: 10px 20px;
-	border-radius: var(--border-radius);
-	word-wrap: break-word; /* Ensure long words break */
-	overflow-wrap: break-word; /* Ensure long words break */
-	white-space: normal; /* Allow normal line breaks */
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+/* User Avatar */
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
-.chatMessageItem #header {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 5px;
+/* Message Content Wrapper */
+.message-content {
+    display: flex;
+    flex-wrap: wrap; /* Allow content to wrap */
+    align-items: center;
+    flex-grow: 1; /* Take up remaining space */
 }
 
-.chatMessageItem #header #platform img {
-	height: 35px;
+/* Username */
+.username {
+    font-weight: bold;
+    margin-right: 8px;
+    color: #9c27b0; /* Example default color */
+    flex-shrink: 0;
 }
 
-.chatMessageItem #header #avatar {
-	border-radius: 50%;
-	height: 35px;
-	overflow: hidden;
+/* Pronouns */
+.pronouns {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-right: 8px;
+    flex-shrink: 0;
 }
 
-.chatMessageItem #header #avatar img {
-	height: 35px;
-	border-radius: 50%;
+/* Badges */
+.badge-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    vertical-align: middle;
+    flex-shrink: 0;
 }
 
-.chatMessageItem #header #badges {
-	display: flex;
-	flex-direction: row;
-	gap: 5px;
+/* Timestamp */
+.timestamp {
+    font-size: 0.8em;
+    color: #bbb;
+    margin-left: 5px;
+    flex-shrink: 0;
 }
 
-.chatMessageItem #header #badges img {
-	height: 25px;
+/* Message Text */
+.message-content .text {
+    flex-grow: 1; /* Allow text to take up space */
+    min-width: 0; /* Allow text to shrink */
 }
 
-.chatMessageItem #header #username {
-	font-weight: bold;
+/* Chat Emotes */
+.chat-emote {
+    height: 1.2em; /* Adjust based on font size */
+    vertical-align: middle;
+    margin: 0 2px;
 }
 
-.chatMessageItem #header #pronouns {
-	color: #ffffff90;
-	font-size: 0.8em;
+/* Chat Stickers (YouTube Super Stickers) */
+.chat-sticker {
+    max-height: 50px; /* Example size for stickers */
+    vertical-align: middle;
+    margin: 0 5px;
 }
 
-.chatMessageItem #header #timestamps {
-	color: #ffffff90;
-	font-size: 0.8em;
-	margin-left: auto; /* Push timestamps to the right */
+/* Chat Links */
+.chat-link {
+    color: #2196f3; /* Blue for links */
+    text-decoration: underline;
 }
 
-.chatMessageItem #content {
-	padding-top: 5px;
-	line-height: var(--line-spacing);
+/* Embedded Images */
+.chat-image-embed {
+    max-width: 80%; /* Don't let images be too wide */
+    max-height: 200px; /* Max height for images */
+    display: block; /* New line for images */
+    margin-top: 5px;
+    border-radius: 5px;
 }
 
-.chatMessageItem #image {
-	width: 100%;
-	border-radius: var(--border-radius);
-	margin-top: 10px;
-}
-
-
-/* Platforms */
-.announcementRed {
-	background: linear-gradient(#b83c31BF, #ff5748BF) !important;
-}
-
-.announcementBlue {
-	background: linear-gradient(#1f4e79BF, #5e84a2BF) !important;
-}
-
-.announcementGreen {
-	background: linear-gradient(#01da86BF, #55bee4BF) !important;
-}
-
-.announcementOrange {
-	background: linear-gradient(#feb419BF, #e1df00BF) !important;
-}
-
-.announcementPurple {
-	background: linear-gradient(#9548ffBF, #fc74e6BF) !important;
-}
-
-.twitch {
-	background: linear-gradient(#6d5ca1bf, #9146ffBF) !important;
-}
-
-.youtube {
-	background: linear-gradient(#FF6C60BF, #FF0707BF) !important;
-}
-
-.streamlabs {
-	background: linear-gradient(#73dabbbf, #397765bf) !important;
-}
-
-.streamelements {
-	background: linear-gradient(#263b8abf, #0a112abf) !important;
-}
-
-.patreon {
-	background: linear-gradient(#c76633bf, #fd5e0abf) !important;
-}
-
-.kofi {
-	background: linear-gradient(#54c7eebf, #08c2ffbf) !important;
-}
-
-.tipeeeStream {
-	background: linear-gradient(#120e23bf, #5d192abf) !important;
-}
-
-.fourthwall {
-	background: linear-gradient(#466edbbf, #1c56f5bf) !important;
-}
-
-.blank {
-	background: rgba(0, 0, 0, 0.5) !important;
+/* Unmute Label (if audio is suspended) */
+#unmute-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 1000;
 }

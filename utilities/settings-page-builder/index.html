@@ -1,65 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MultiChat Overlay Settings</title>
+    <title>MultiChat Settings</title>
     <link rel="stylesheet" href="./style.css">
+    <style>
+        /* Base styles, can be extended by style.css */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #2e2e2e;
+            color: #f0f0f0;
+        }
+        .settings-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #3e3e3e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .setting-group {
+            border: 1px solid #555;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #4a4a4a;
+        }
+        .group-header {
+            font-size: 1.3em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #90CAF9; /* Light blue for group headers */
+        }
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #555;
+        }
+        .setting-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .setting-label {
+            flex: 1;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .setting-control {
+            flex: 2;
+            display: flex;
+            align-items: center;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="color"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #555;
+            color: #f0f0f0;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #4CAF50;
+        }
+        input:checked + .slider:before {
+            -webkit-transform: translateX(16px);
+            -ms-transform: translateX(16px);
+            transform: translateX(16px);
+        }
+
+        /* Popup Box Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+        .popup-box {
+            background-color: #3e3e3e;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            color: #f0f0f0;
+            position: relative;
+        }
+        .popup-box h2 {
+            color: #4CAF50;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .popup-box textarea {
+            width: calc(100% - 20px);
+            min-height: 100px;
+            background-color: #555;
+            border: 1px solid #777;
+            border-radius: 4px;
+            color: #f0f0f0;
+            padding: 10px;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        .popup-box input[type="text"] {
+            width: calc(100% - 20px);
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+        .popup-box .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .popup-box button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .popup-box .copy-button {
+            background-color: #28a745; /* Green for copy */
+        }
+        .popup-box .copy-button:hover {
+            background-color: #218838;
+        }
+        .popup-box .close-button {
+            background-color: #dc3545; /* Red for close */
+        }
+        .popup-box .close-button:hover {
+            background-color: #c82333;
+        }
+        .popup-box .action-button {
+            background-color: #007bff; /* Blue for action */
+        }
+        .popup-box .action-button:hover {
+            background-color: #0056b3;
+        }
+        .popup-box .output-url-box {
+            background-color: #555;
+            border: 1px solid #777;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            word-break: break-all;
+            text-align: left;
+        }
+        .popup-box .info-text {
+            font-size: 0.9em;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+        .preview-wrapper {
+            margin-top: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #222;
+        }
+        .preview-wrapper h3 {
+            background-color: #555;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            color: #f0f0f0;
+        }
+        #widgetPreview {
+            width: 100%;
+            height: 300px; /* Fixed height for preview */
+            border: none;
+            background-color: black;
+        }
+
+        .channel-icons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        .channel-icon {
+            width: 30px; /* Size of the icon */
+            height: 30px;
+        }
+    </style>
 </head>
-
 <body>
-    <div id="header">
-        <img src="../../multichat-overlay/icons/logo.png" style="height: 40px;">
-        <div id="widgetUrlInputWrapper">
-            <span id="urlLabel">Click to copy URL</span>
-            <input id="widgetUrlInput" type="text" readonly onclick="CopyURLToClipboard()">
-        </div>
-    </div>
+    <div class="settings-container">
+        <h1>
+            <img src="../../multichat-overlay/icons/logo.png" alt="Logo" class="channel-icon" style="vertical-align: middle; margin-right: 10px;">
+            MultiChat Overlay Settings
+        </h1>
 
-    <div id="contentArea">
-        <div id="settingsPanel"></div>
-        <div id="widgetPreviewWrapper">
-            <span id="unmute-label" style="display: none;">Click on preview to unmute</span>
-            <iframe id="widgetPreview" style="width:100%; height:100%; border:none;"></iframe>
-        </div>
-    </div>
+        <div id="settingsForm">
+            </div>
 
-    <div id="loadUrlBox" class="popup-box">
-        <div class="popup-content">
-            <h3>Load URL Parameters</h3>
-            <input type="text" id="urlToLoadInput" placeholder="Paste your overlay URL here">
-            <div class="popup-buttons">
-                <button onclick="LoadURL()">Load</button>
-                <button onclick="CloseLoadURLPopup()">Cancel</button>
+        <div class="preview-wrapper">
+            <h3>Overlay Preview</h3>
+            <iframe id="widgetPreview" src=""></iframe>
+        </div>
+
+        <div id="loadUrlWrapper" class="popup-overlay">
+            <div id="loadUrlBox" class="popup-box">
+                <h2>Load from URL Parameters</h2>
+                <div class="info-text">
+                    Paste the entire URL from your browser or OBS for the overlay here.
+                    The settings will be extracted and applied.
+                </div>
+                <input type="text" id="urlToLoadInput" placeholder="Paste URL here...">
+                <div class="button-group">
+                    <button class="action-button" id="loadFromUrlButton">Load Settings</button>
+                    <button class="close-button" id="closeLoadUrlButton">Close</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="loadDefaultsWrapper" class="popup-box">
-        <div class="popup-content">
-            <h3>Load Default Settings</h3>
-            <p>Are you sure you want to load default settings? This will overwrite your current unsaved changes.</p>
-            <div class="popup-buttons">
-                <button onclick="LoadDefaults()">Confirm</button>
-                <button onclick="CloseLoadDefaultsPopup()">Cancel</button>
+        <div id="loadDefaultsWrapper" class="popup-overlay">
+            <div id="loadDefaultsBox" class="popup-box">
+                <h2>Load Default Settings?</h2>
+                <div class="info-text">
+                    This will reset all settings to their default values.
+                    Are you sure you want to proceed?
+                </div>
+                <div class="button-group">
+                    <button class="action-button" id="confirmLoadDefaultsButton">Yes, Load Defaults</button>
+                    <button class="close-button" id="cancelLoadDefaultsButton">No, Cancel</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="loadSettingsWrapper" class="popup-box">
-        <div class="popup-content">
-            <h3>Import / Export Settings</h3>
-            <textarea id="settingsJsonInput" placeholder="Paste your settings JSON here" rows="10"></textarea>
-            <div class="popup-buttons">
-                <button onclick="ImportSettings()">Import</button>
-                <button onclick="ExportSettings()">Export</button>
-                <button onclick="CloseLoadSettingsPopup()">Close</button>
+        <div id="loadSettingsWrapper" class="popup-overlay">
+            <div id="loadSettingsBox" class="popup-box">
+                <h2>Import / Export Settings</h2>
+                <div class="info-text">
+                    To save your current settings, copy the JSON below.<br>
+                    To import settings, paste your JSON into the box and click "Load".
+                </div>
+                <textarea id="jsonInputOutput" placeholder="Paste settings JSON here to import, or copy current settings from here"></textarea>
+                <div class="button-group">
+                    <button class="action-button" id="loadJsonButton">Load JSON</button>
+                    <button class="copy-button" id="copyJsonButton">Copy JSON</button>
+                </div>
+                <div class="button-group" style="margin-top: 15px;">
+                    <button class="close-button" id="closeLoadSettingsButton">Close</button>
+                </div>
             </div>
         </div>
+
+        <div id="urlOutputWrapper" class="popup-overlay">
+            <div id="urlOutputBox" class="popup-box">
+                <h2>Your Custom Overlay URL</h2>
+                <div class="info-text">
+                    Copy this URL and paste it into your OBS Browser Source.
+                    <br>This URL includes all your chosen settings.
+                </div>
+                <div class="output-url-box" id="generatedUrlOutput"></div>
+                <div class="button-group" style="margin-top: 15px;">
+                    <button class="copy-button" id="copyGeneratedUrlButton">Copy URL</button>
+                    <button class="close-button" id="closeUrlOutputButton">Close</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="./script.js"></script>
 </body>
-
 </html>
