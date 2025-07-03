@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSMultichat - PanelMC Chat</title> <style>
+    <title>MSMultichat - PanelMC Chat</title>
+    <style>
         /* Estilos básicos para el chat */
         body {
             font-family: Arial, sans-serif;
@@ -83,7 +84,7 @@
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot:', data); // ¡ESTA LÍNEA AHORA ESTÁ REALMENTE DESCOMENTADA Y EJECUTÁNDOSE!
+                console.log('Mensaje de Streamer.bot:', data); // ¡Esta línea ahora está REALMENTE descomentada y ejecutándose!
 
                 // Verificamos si es un mensaje de chat de Twitch
                 if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
@@ -126,13 +127,15 @@
                 <span>${message}</span>
             `;
 
-            chatContainer.prepend(messageElement);
+            chatContainer.prepend(messageElement); // Agrega el mensaje al principio (aparecerá abajo por flex-direction: column-reverse)
 
+            // Limitar el número de mensajes
             while (chatContainer.children.length > maxMessages) {
                 chatContainer.removeChild(chatContainer.lastChild);
             }
         }
 
+        // Iniciar la conexión cuando la página cargue
         window.onload = connectWebSocket;
     </script>
 </body>
