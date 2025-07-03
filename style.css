@@ -4,48 +4,70 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para OBS */
-    font-family: Arial, sans-serif;
+    /* Fondo semitransparente para OBS. Puedes ajustar la transparencia (0.0 a 1.0) */
+    background-color: rgba(0, 0, 0, 0.3); 
+    font-family: 'Roboto', sans-serif; /* Usaremos Roboto, similar a Nutty */
     color: white;
-    overflow: hidden;
+    overflow: hidden; /* Oculta barras de desplazamiento del body */
 }
 
+/* Contenedor principal del chat */
 #chat-container {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column-reverse; /* Mensajes nuevos aparecen abajo */
+    justify-content: flex-start; /* Alinea los mensajes al inicio (abajo) */
+    align-items: flex-start; /* Alinea los mensajes a la izquierda */
     
-    height: 400px; /* ¡FORZAMOS UNA ALTURA DE 400 PÍXELES! */
-    width: 300px;  /* ¡FORZAMOS UN ANCHO DE 300 PÍXELES! */
+    /* Dimensiones fijas para que siempre sea visible */
+    height: 600px; /* Ejemplo de altura, ajusta según tu OBS */
+    width: 400px;  /* Ejemplo de ancho, ajusta según tu OBS */
 
     padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
+    box-sizing: border-box; /* Incluye el padding en el tamaño final */
+    overflow-y: auto; /* Permite desplazamiento si los mensajes exceden la altura */
     
-    background-color: rgba(0, 255, 0, 0.5); /* VERDE semitransparente */
-    border: 2px solid limegreen; /* Borde verde brillante */
+    /* Colores de depuración para que veas el contenedor */
+    background-color: rgba(0, 100, 0, 0.4); /* Verde oscuro semitransparente */
+    border: 1px solid limegreen; /* Borde verde brillante */
+    border-radius: 8px; /* Bordes ligeramente redondeados */
 }
 
+/* Estilo para cada mensaje individual */
 .chat-message {
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    background-color: rgba(255, 0, 0, 0.9); /* ROJO FUERTE, MENOS TRANSPARENCIA */
-    color: yellow; /* Texto AMARILLO para contraste */
-    font-size: 18px;
-    font-weight: bold;
-    opacity: 1 !important; /* Asegura que no tenga transparencia */
-    visibility: visible !important; /* Asegura que no esté oculto */
-    display: block !important; /* Asegura que se renderice como un bloque */
+    margin-bottom: 8px; /* Espacio entre mensajes */
+    padding: 8px 12px; /* Espacio interno del mensaje */
+    border-radius: 18px; /* Bordes redondeados para burbuja de chat */
+    max-width: 90%; /* Mensajes no ocupan todo el ancho, dejando espacio */
+    word-wrap: break-word; /* Rompe palabras largas para que no se desborden */
+    
+    /* Colores de depuración para que veas los mensajes */
+    background-color: rgba(50, 50, 50, 0.8); /* Gris oscuro semitransparente */
+    color: white; /* Color de texto blanco */
+    font-size: 16px;
+    line-height: 1.4; /* Espaciado entre líneas */
+    
+    /* Aseguramos visibilidad absoluta */
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
 }
+
+/* Estilo para el nombre de usuario */
 .username {
     font-weight: bold;
     margin-right: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Sombra para mejor lectura */
 }
+
+/* Iconos de plataforma */
 .platform-icon {
     width: 16px;
     height: 16px;
     vertical-align: middle;
     margin-right: 5px;
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5)); /* Sombra para icono */
 }
-.twitch { color: #9146FF; }
-.youtube { color: #FF0000; }
+
+/* Colores de los nombres de usuario por plataforma */
+.twitch { color: #9146FF; } /* Morado de Twitch */
+.youtube { color: #FF0000; } /* Rojo de YouTube */
