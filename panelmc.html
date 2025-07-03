@@ -40,12 +40,17 @@
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot:', data);
+                console.log('Mensaje de Streamer.bot (RAW):', data); // Log del objeto completo
 
-                if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
-                    console.log('>>> ¡Condición de CHAT MESSAGE cumplida! Mostrando mensaje...'); // AÑADIR ESTA LÍNEA
-                    console.log('   Username:', data.data.displayName, 'Message:', data.data.message); // AÑADIR ESTA LÍNEA                    
+                // FORZAMOS LA LLAMADA A displayMessage SI LOS DATOS ESENCIALES EXISTEN
+                // Esto es para ver si se están llamando con los datos correctos para CADA mensaje
+                if (data.data && data.data.displayName && data.data.message) {
+                    console.log('>>> ATENCIÓN: Intentando mostrar mensaje de chat.');
+                    console.log('    Usuario:', data.data.displayName, 'Mensaje:', data.data.message);
                     displayMessage(data.data.displayName, data.data.message, 'Twitch');
+                } else {
+                    // Si no tiene las propiedades de chat, lo registramos pero no intentamos mostrar
+                    console.warn('Objeto recibido no es un mensaje de chat con datos completos o esperado:', data);
                 }
             };
 
@@ -61,6 +66,11 @@
 
         function displayMessage(username, message, platform) {
             const chatContainer = document.getElementById('chat-container');
+            if (!chatContainer) {
+                console.error('Error: chat-container no encontrado en el DOM.');
+                return;
+            }
+
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-message');
 
@@ -82,15 +92,19 @@
 
             chatContainer.prepend(messageElement);
 
+            // Elimina mensajes viejos si se excede el límite
             while (chatContainer.children.length > maxMessages) {
                 chatContainer.removeChild(chatContainer.lastChild);
             }
         }
 
         window.onload = () => {
-            // Añade un mensaje de prueba al cargar la página para ver si el JS funciona
+            // Añade un mensaje de prueba al cargar la página para verificar la visibilidad del chat-container
             displayMessage('Sistema', '¡Bienvenido al chat!', 'Twitch'); 
-            connectWebSocket(); // Luego, inicia la conexión WebSocket
+            console.log('Mensaje de bienvenida añadido.');
+
+            // Inicia la conexión WebSocket
+            connectWebSocket(); 
         };
     </script>
 </body>
