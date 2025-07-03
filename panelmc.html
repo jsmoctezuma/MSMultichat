@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSMultichat - PanelMC Chat</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="chat-container">
@@ -22,6 +25,7 @@
 
             ws.onopen = () => {
                 console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
+                // Suscripciones a eventos
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
                     id: 'chat-messages',
@@ -40,17 +44,17 @@
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot (RAW):', data); // Log del objeto completo
+                console.log('Mensaje de Streamer.bot (RAW):', data);
 
-                // FORZAMOS LA LLAMADA A displayMessage SI LOS DATOS ESENCIALES EXISTEN
-                // Esto es para ver si se están llamando con los datos correctos para CADA mensaje
-                if (data.data && data.data.displayName && data.data.message) {
-                    console.log('>>> ATENCIÓN: Intentando mostrar mensaje de chat.');
-                    console.log('    Usuario:', data.data.displayName, 'Mensaje:', data.data.message);
+                // Verificamos si es un mensaje de chat y tiene los datos esperados
+                if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch' &&
+                    data.data && data.data.displayName && data.data.message) {
+                    
+                    console.log('>>> CHAT MESSAGE DETECTADO. Usuario:', data.data.displayName, 'Mensaje:', data.data.message);
                     displayMessage(data.data.displayName, data.data.message, 'Twitch');
+
                 } else {
-                    // Si no tiene las propiedades de chat, lo registramos pero no intentamos mostrar
-                    console.warn('Objeto recibido no es un mensaje de chat con datos completos o esperado:', data);
+                    console.warn('Objeto recibido no es un ChatMessage esperado o le faltan datos:', data);
                 }
             };
 
@@ -73,35 +77,48 @@
 
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-message');
+            messageElement.id = 'msg-' + Date.now(); // Para depuración
 
-            let iconHtml = '';
-            let platformClass = '';
+            // Creamos los elementos internos del mensaje para mayor control
+            const iconSpan = document.createElement('span');
+            iconSpan.classList.add('platform-icon');
             if (platform === 'Twitch') {
-                iconHtml = '<span class="platform-icon">🟣</span>';
-                platformClass = 'twitch';
+                iconSpan.textContent = '🟣';
+                // Puedes añadir una clase específica para el color del icono si quieres
             } else if (platform === 'YouTube') {
-                iconHtml = '<span class="platform-icon">🔴</span>';
-                platformClass = 'youtube';
+                iconSpan.textContent = '🔴';
             }
+            messageElement.appendChild(iconSpan);
 
-            messageElement.innerHTML = `
-                ${iconHtml}
-                <span class="username ${platformClass}">${username}:</span>
-                <span>${message}</span>
-            `;
+            const usernameSpan = document.createElement('span');
+            usernameSpan.classList.add('username');
+            usernameSpan.classList.add(platform.toLowerCase()); // Añade twitch o youtube para el color del nombre
+            usernameSpan.textContent = username + ':';
+            messageElement.appendChild(usernameSpan);
 
+            const messageSpan = document.createElement('span');
+            messageSpan.textContent = message;
+            messageElement.appendChild(messageSpan);
+
+            // Añadir el mensaje al contenedor
             chatContainer.prepend(messageElement);
+
+            console.log('Mensaje añadido al chat-container:', messageElement.id, 'Contenido HTML:', messageElement.outerHTML);
+            console.log('Estado actual del chat-container (después de añadir):', chatContainer.outerHTML);
+            console.log('Número total de mensajes en el contenedor:', chatContainer.children.length);
+
 
             // Elimina mensajes viejos si se excede el límite
             while (chatContainer.children.length > maxMessages) {
                 chatContainer.removeChild(chatContainer.lastChild);
             }
+            console.log('Número de mensajes después de limpiar:', chatContainer.children.length);
         }
 
         window.onload = () => {
-            // Añade un mensaje de prueba al cargar la página para verificar la visibilidad del chat-container
+            // Mensaje de bienvenida para probar el renderizado inicial
             displayMessage('Sistema', '¡Bienvenido al chat!', 'Twitch'); 
-            console.log('Mensaje de bienvenida añadido.');
+            console.log('Mensaje de bienvenida añadido al cargar.');
 
             // Inicia la conexión WebSocket
             connectWebSocket(); 
