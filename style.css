@@ -13,14 +13,14 @@ html, body {
 #chat-container {
     display: flex;
     flex-direction: column-reverse;
-
-    height: 400px; /* ¡FORZAMOS UNA ALTURA DE 400 PÍXELS! */
-    width: 300px;  /* ¡FORZAMOS UN ANCHO DE 300 PÍXELS! */
+    
+    height: 400px; /* ¡FORZAMOS UNA ALTURA DE 400 PÍXELES! */
+    width: 300px;  /* ¡FORZAMOS UN ANCHO DE 300 PÍXELES! */
 
     padding: 10px;
     box-sizing: border-box;
     overflow-y: auto;
-
+    
     background-color: rgba(0, 255, 0, 0.5); /* VERDE semitransparente */
     border: 2px solid limegreen; /* Borde verde brillante */
 }
@@ -29,10 +29,15 @@ html, body {
     margin-bottom: 5px;
     padding: 5px;
     border-radius: 5px;
-    background-color: rgba(255, 0, 0, 0.5); /* ROJO semitransparente */
+    background-color: rgba(255, 0, 0, 0.9); /* ROJO FUERTE, MENOS TRANSPARENCIA */
     color: yellow; /* Texto AMARILLO para contraste */
     font-size: 18px;
     font-weight: bold;
+    /* --- NUEVAS LÍNEAS PARA ASEGURAR VISIBILIDAD --- */
+    opacity: 1 !important; /* Asegura que no tenga transparencia */
+    visibility: visible !important; /* Asegura que no esté oculto */
+    display: block !important; /* Asegura que se renderice como un bloque */
+    /* ----------------------------------------------- */
 }
 .username {
     font-weight: bold;
