@@ -13,6 +13,14 @@
     <div id="chat-container">
         </div>
 
+    <template id="chatMessageTemplate">
+        <div class="chat-message-item">
+            <span class="platform-icon"></span>
+            <span class="username"></span>
+            <span class="message-content"></span>
+            </div>
+    </template>
+
     <script>
         // --- Configuración ---
         const websocketAddress = 'ws://127.0.0.1:8080/'; // ¡IMPORTANTE! Revisa tu puerto en Streamer.bot
@@ -25,12 +33,12 @@
 
             ws.onopen = () => {
                 console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
-                // Suscripciones a eventos
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
                     id: 'chat-messages',
                     events: { Twitch: ['ChatMessage'] }
                 }));
+                // Mantén esta suscripción si quieres manejar otros eventos en el futuro
                 ws.send(JSON.stringify({
                     request: 'Subscribe',
                     id: 'twitch-general',
@@ -68,45 +76,48 @@
             };
         }
 
+        // Función displayMessage adaptada para usar la plantilla
         function displayMessage(username, message, platform) {
             const chatContainer = document.getElementById('chat-container');
+            const template = document.getElementById('chatMessageTemplate');
+
             if (!chatContainer) {
                 console.error('Error: chat-container no encontrado en el DOM.');
                 return;
             }
-
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message');
-            messageElement.id = 'msg-' + Date.now(); // Para depuración
-
-            // Creamos los elementos internos del mensaje para mayor control
-            const iconSpan = document.createElement('span');
-            iconSpan.classList.add('platform-icon');
-            if (platform === 'Twitch') {
-                iconSpan.textContent = '🟣';
-                // Puedes añadir una clase específica para el color del icono si quieres
-            } else if (platform === 'YouTube') {
-                iconSpan.textContent = '🔴';
+            if (!template) {
+                console.error('Error: chatMessageTemplate no encontrado en el DOM.');
+                return;
             }
-            messageElement.appendChild(iconSpan);
 
-            const usernameSpan = document.createElement('span');
-            usernameSpan.classList.add('username');
-            usernameSpan.classList.add(platform.toLowerCase()); // Añade twitch o youtube para el color del nombre
+            // Clona el contenido de la plantilla
+            const messageInstance = template.content.cloneNode(true);
+            const messageElement = messageInstance.querySelector('.chat-message-item');
+
+            // Encuentra los elementos dentro de la plantilla clonada
+            const iconSpan = messageElement.querySelector('.platform-icon');
+            const usernameSpan = messageElement.querySelector('.username');
+            const messageContentSpan = messageElement.querySelector('.message-content');
+            // const timestampSpan = messageElement.querySelector('.timestamp'); // Si decides usar timestamp
+
+            // Rellena los datos
+            if (platform === 'Twitch') {
+                iconSpan.textContent = '🟣'; // O una imagen si lo cambias
+                usernameSpan.classList.add('twitch');
+            } else if (platform === 'YouTube') {
+                iconSpan.textContent = '🔴'; // O una imagen si lo cambias
+                usernameSpan.classList.add('youtube');
+            }
             usernameSpan.textContent = username + ':';
-            messageElement.appendChild(usernameSpan);
-
-            const messageSpan = document.createElement('span');
-            messageSpan.textContent = message;
-            messageElement.appendChild(messageSpan);
+            messageContentSpan.textContent = message;
+            // if (timestampSpan) timestampSpan.textContent = new Date().toLocaleTimeString(); // Si usas timestamp
 
             // Añadir el mensaje al contenedor
-            chatContainer.prepend(messageElement);
+            chatContainer.prepend(messageInstance); // Se añade el DocumentFragment de la plantilla
 
-            console.log('Mensaje añadido al chat-container:', messageElement.id, 'Contenido HTML:', messageElement.outerHTML);
+            console.log('Mensaje añadido al chat-container. Elemento clonado:', messageElement.outerHTML);
             console.log('Estado actual del chat-container (después de añadir):', chatContainer.outerHTML);
             console.log('Número total de mensajes en el contenedor:', chatContainer.children.length);
-
 
             // Elimina mensajes viejos si se excede el límite
             while (chatContainer.children.length > maxMessages) {
