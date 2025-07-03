@@ -48,42 +48,62 @@
 
     <script>
         // --- Configuración ---
-        // Asegúrate que esta dirección y puerto coincidan con tu Streamer.bot WebSocket Server
         const websocketAddress = 'ws://127.0.0.1:8080/'; // ¡IMPORTANTE! Revisa tu puerto en Streamer.bot
-        const maxMessages = 50; // Límite de mensajes a mostrar para evitar sobrecarga
+        const maxMessages = 50;
 
-        let ws; // Variable para la conexión WebSocket
+        let ws;
 
         function connectWebSocket() {
             ws = new WebSocket(websocketAddress);
 
             ws.onopen = () => {
-                console.log('Conectado a Streamer.bot WebSocket');
-                // Opcional: Solicitar información al conectarse
-                // ws.send(JSON.stringify({ request: 'GetInfo' }));
+                console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
+                // --- ¡NUEVAS LÍNEAS AQUÍ! ---
+                // Suscribirse a mensajes de chat de Twitch
+                ws.send(JSON.stringify({
+                    request: 'Subscribe',
+                    id: 'chat-messages', // Un ID único para esta suscripción
+                    events: {
+                        Twitch: ['ChatMessage'] // Queremos mensajes de chat de Twitch
+                    }
+                }));
+
+                // Suscribirse a otros eventos que puedas necesitar más tarde
+                ws.send(JSON.stringify({
+                    request: 'Subscribe',
+                    id: 'twitch-general', // Otro ID para otros eventos de Twitch
+                    events: {
+                        Twitch: [
+                            'Follow', 'Subscribe', 'GiftSub', 'Cheer', 'Raid', // Eventos comunes
+                            'StreamOnline', 'StreamOffline', // Eventos de estado de la transmisión
+                            'ChannelPointReward', 'Redemption', // Recompensas de puntos de canal
+                            'Hypetrain' // Hype Train
+                        ]
+                    }
+                }));
+                // --- FIN DE NUEVAS LÍNEAS ---
             };
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                // console.log('Mensaje de Streamer.bot:', data); // Para depuración
+                // console.log('Mensaje de Streamer.bot:', data); // Para depuración, descomenta para ver todos los datos
 
-                // Verificamos si es un mensaje de chat
-                if (data.event && data.event.type === 'Twitch' && data.event.source === 'ChatMessage') {
+                // Verificamos si es un mensaje de chat de Twitch
+                if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
                     displayMessage(data.data.displayName, data.data.message, 'Twitch');
                 }
                 // TODO: Aquí agregaremos la lógica para YouTube, Kick y TikTok
-                // Cuando tengamos la integración de YouTube con Streamer.bot,
-                // buscaríamos 'YouTube' en data.event.type.
+                // Más adelante, revisaremos la estructura de los datos de YouTube cuando la integremos
             };
 
             ws.onclose = () => {
                 console.log('Desconectado de Streamer.bot WebSocket. Reintentando en 5 segundos...');
-                setTimeout(connectWebSocket, 5000); // Intenta reconectar después de 5 segundos
+                setTimeout(connectWebSocket, 5000);
             };
 
             ws.onerror = (error) => {
                 console.error('Error en WebSocket:', error);
-                ws.close(); // Cierra la conexión para que onclose intente reconectar
+                // No cierres el WS aquí, deja que onclose maneje el intento de reconexión
             };
         }
 
@@ -92,14 +112,13 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('chat-message');
 
-            // Añadir un icono de plataforma (puedes reemplazar con imágenes reales)
             let iconHtml = '';
             let platformClass = '';
             if (platform === 'Twitch') {
-                iconHtml = '<span class="platform-icon">🟣</span>'; // Emoticono temporal, reemplaza por imagen
+                iconHtml = '<span class="platform-icon">🟣</span>';
                 platformClass = 'twitch';
             } else if (platform === 'YouTube') {
-                iconHtml = '<span class="platform-icon">🔴</span>'; // Emoticono temporal
+                iconHtml = '<span class="platform-icon">🔴</span>';
                 platformClass = 'youtube';
             }
             // TODO: Agregar iconos para Kick y TikTok
@@ -110,15 +129,13 @@
                 <span>${message}</span>
             `;
 
-            chatContainer.prepend(messageElement); // Agrega el mensaje al principio (aparecerá abajo por flex-direction: column-reverse)
+            chatContainer.prepend(messageElement);
 
-            // Limitar el número de mensajes
             while (chatContainer.children.length > maxMessages) {
                 chatContainer.removeChild(chatContainer.lastChild);
             }
         }
 
-        // Iniciar la conexión cuando la página cargue
         window.onload = connectWebSocket;
     </script>
 </body>
