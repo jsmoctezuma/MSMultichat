@@ -1,151 +1,47 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSMultichat - PanelMC Chat</title>
-    <style>
-        /* Aseguramos que HTML y BODY ocupen toda la altura */
-        html, body {
-            height: 100%; /* Ocupa el 100% de la altura del viewport */
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    /* Aseguramos que HTML y BODY ocupen toda la altura */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
-        /* Estilos básicos para el chat */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para ver a través en OBS */
-            color: white;
-            /* margin: 0; */ /* Ya cubierto por html, body */
-            /* padding: 10px; */ /* Lo moveremos al chat-container si es necesario */
-            overflow: hidden; /* Oculta barras de desplazamiento si el contenido excede */
-        }
-        #chat-container {
-            display: flex;
-            flex-direction: column-reverse; /* Hace que los mensajes nuevos aparezcan abajo */
-            height: 100%; /* Ahora ocupará el 100% de la altura del body */
-            /* Eliminamos el calc() porque ya body es 100% */
-            overflow-y: auto; /* Permite desplazamiento si hay muchos mensajes */
-            padding: 10px; /* Padding para los mensajes dentro del contenedor */
-            box-sizing: border-box; /* Asegura que el padding no añada altura extra */
-        }
-        .chat-message {
-            margin-bottom: 5px;
-            padding: 5px;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .username {
-            font-weight: bold;
-            margin-right: 5px;
-        }
-        .platform-icon {
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-            margin-right: 5px;
-        }
-        /* Clases para colores de plataforma (ejemplos) */
-        .twitch { color: #9146FF; }
-        .youtube { color: #FF0000; }
-    </style>
-</head>
-<body>
-    <div id="chat-container">
-        </div>
-
-    <script>
-        // --- Configuración ---
-        const websocketAddress = 'ws://127.0.0.1:8080/'; // ¡IMPORTANTE! Revisa tu puerto en Streamer.bot
-        const maxMessages = 50;
-
-        let ws;
-
-        function connectWebSocket() {
-            ws = new WebSocket(websocketAddress);
-
-            ws.onopen = () => {
-                console.log('Conectado a Streamer.bot WebSocket. Suscribiendo a eventos...');
-                // Suscribirse a mensajes de chat de Twitch
-                ws.send(JSON.stringify({
-                    request: 'Subscribe',
-                    id: 'chat-messages', // Un ID único para esta suscripción
-                    events: {
-                        Twitch: ['ChatMessage'] // Queremos mensajes de chat de Twitch
-                    }
-                }));
-
-                // Suscribirse a otros eventos que puedas necesitar más tarde
-                ws.send(JSON.stringify({
-                    request: 'Subscribe',
-                    id: 'twitch-general', // Otro ID para otros eventos de Twitch
-                    events: {
-                        Twitch: [
-                            'Follow', 'Subscribe', 'GiftSub', 'Cheer', 'Raid', // Eventos comunes
-                            'StreamOnline', 'StreamOffline', // Eventos de estado de la transmisión
-                            'ChannelPointReward', 'Redemption', // Recompensas de puntos de canal
-                            'Hypetrain' // Hype Train
-                        ]
-                    }
-                }));
-            };
-
-            ws.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log('Mensaje de Streamer.bot:', data); // ¡Esta línea ahora está REALMENTE descomentada y ejecutándose!
-
-                // Verificamos si es un mensaje de chat de Twitch
-                if (data.event && data.event.source === 'ChatMessage' && data.event.type === 'Twitch') {
-                    displayMessage(data.data.displayName, data.data.message, 'Twitch');
-                }
-                // TODO: Aquí agregaremos la lógica para YouTube, Kick y TikTok
-                // Más adelante, revisaremos la estructura de los datos de YouTube cuando la integremos
-            };
-
-            ws.onclose = () => {
-                console.log('Desconectado de Streamer.bot WebSocket. Reintentando en 5 segundos...');
-                setTimeout(connectWebSocket, 5000);
-            };
-
-            ws.onerror = (error) => {
-                console.error('Error en WebSocket:', error);
-                // No cierres el WS aquí, deja que onclose maneje el intento de reconexión
-            };
-        }
-
-        function displayMessage(username, message, platform) {
-            const chatContainer = document.getElementById('chat-container');
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('chat-message');
-
-            let iconHtml = '';
-            let platformClass = '';
-            if (platform === 'Twitch') {
-                iconHtml = '<span class="platform-icon">🟣</span>';
-                platformClass = 'twitch';
-            } else if (platform === 'YouTube') {
-                iconHtml = '<span class="platform-icon">🔴</span>';
-                platformClass = 'youtube';
-            }
-            // TODO: Agregar iconos para Kick y TikTok
-
-            messageElement.innerHTML = `
-                ${iconHtml}
-                <span class="username ${platformClass}">${username}:</span>
-                <span>${message}</span>
-            `;
-
-            chatContainer.prepend(messageElement); // Agrega el mensaje al principio (aparecerá abajo por flex-direction: column-reverse)
-
-            // Limitar el número de mensajes
-            while (chatContainer.children.length > maxMessages) {
-                chatContainer.removeChild(chatContainer.lastChild);
-            }
-        }
-
-        // Iniciar la conexión cuando la página cargue
-        window.onload = connectWebSocket;
-    </script>
-</body>
-</html>
+    /* Estilos básicos para el chat */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: blue; /* ¡CAMBIAR A AZUL FUERTE PARA VER! */
+        color: white;
+        overflow: hidden;
+    }
+    #chat-container {
+        display: flex;
+        flex-direction: column-reverse;
+        height: 100%;
+        overflow-y: auto;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: green; /* ¡CAMBIAR A VERDE FUERTE PARA VER! */
+    }
+    .chat-message {
+        margin-bottom: 5px;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: red; /* ¡CAMBIAR A ROJO FUERTE PARA VER! */
+        color: yellow; /* ¡TEXTO AMARILLO PARA CONTRASTAR! */
+        font-size: 20px; /* Aumentar tamaño para visibilidad */
+        font-weight: bold; /* Hacer texto más visible */
+    }
+    .username {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    .platform-icon {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+    /* Clases para colores de plataforma (ejemplos) */
+    .twitch { color: purple; } /* Cambiar a un color diferente para el texto del nombre de usuario */
+    .youtube { color: orange; } /* Cambiar a un color diferente */
+</style>
