@@ -1,62 +1,63 @@
 <!DOCTYPE html>
-<html style="--line-spacing: 1.7em; --animation-speed: 0.1s;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
-	<link rel="shortcut icon" href="https://widgets.nutty.gg/multichat-overlay/?showPlatform=true&amp;showAvatar=true&amp;showTimestamps=true&amp;showBadges=true&amp;showPronouns=true&amp;showUsername=true&amp;showMessage=true&amp;font=&amp;fontSize=30&amp;lineSpacing=1.7&amp;background=%23000000&amp;opacity=0.85&amp;hideAfter=0&amp;excludeCommands=true&amp;ignoreChatters=StreamElements%2CStreamlabs&amp;scrollDirection=1&amp;groupConsecutiveMessages=false&amp;inlineChat=false&amp;imageEmbedPermissionLevel=20&amp;showTwitchMessages=true&amp;showTwitchAnnouncements=true&amp;showTwitchSubs=true&amp;showTwitchChannelPointRedemptions=true&amp;showTwitchRaids=true&amp;showTwitchSharedChat=2&amp;showYouTubeMessages=true&amp;showYouTubeSuperChats=true&amp;showYouTubeSuperStickers=true&amp;showYouTubeMemberships=true&amp;showStreamlabsDonations=true&amp;showStreamElementsTips=true&amp;showPatreonMemberships=true&amp;showKofiDonations=true&amp;showTipeeeStreamDonations=true&amp;showFourthwallAlerts=true&amp;furryMode=true&amp;address=127.0.0.1&amp;port=8080#">
-	<link rel="stylesheet" href="./style.css">
-	<script type="text/javascript" src="./streamerbot-client.js"></script>
-	<script type="text/javascript" src="./script.js"></script>
+<html style="--line-spacing: 1.7em; --animation-speed: 0.1s;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" href="./style.css">
+    <script type="text/javascript" src="./streamerbot-client.js"></script>
+    <script type="text/javascript" src="./settings-loader.js"></script> <script type="text/javascript" src="./script.js"></script>
 </head>
 
 <body style="font-size: 30px; background: rgba(0, 0, 0, 0.85);">
-	<div id="statusContainer" style="background: rgb(47, 183, 116); opacity: 0; transition: 2s;">Connected!</div>
-	<div id="mainContainer">
-		<div id="messageList" class="scroll-direction-1">
-		</div>
-	</div>
+    <div id="statusContainer" style="background: rgb(47, 183, 116); opacity: 0; transition: 2s;">Connected!</div>
+    <div id="mainContainer">
+        <div id="messageList" class="scroll-direction-1">
+        </div>
+    </div>
 
-	<template id="messageTemplate">
-		<div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-			<div id="card" style="background: linear-gradient(rgba(109, 92, 161, 0.75), rgba(145, 70, 255, 0.75));">
-				<div id="header">
-					<div id="platform"></div>
-					<div id="avatar"></div>
-					<div id="badges"></div>
-					<div id="username">username</div>
-					<div id="pronouns"></div>
-					<div id="timestamps"></div>
-				</div>
-				<div id="content">message</div>
-			</div>
-		</div>
-	</template>
+    <template id="messageTemplate">
+        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
+            <div id="card" style="background: linear-gradient(rgba(109, 92, 161, 0.75), rgba(145, 70, 255, 0.75));">
+                <div id="header">
+                    <div id="platform"></div>
+                    <div id="avatar"></div>
+                    <div id="badges"></div>
+                    <div id="username">username</div>
+                    <div id="pronouns"></div>
+                    <div id="timestamps"></div>
+                </div>
+                <div id="content">message</div>
+            </div>
+        </div>
+    </template>
 
-	<template id="alertTemplate">
-		<div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-			<div id="card">
-				<div id="header">
-					<div id="icon"></div>
-					<div id="title"></div>
-				</div>
-				<div id="content"></div>
-			</div>
-		</div>
-	</template>
+    <template id="alertTemplate">
+        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
+            <div id="card">
+                <div id="header">
+                    <div id="icon"></div>
+                    <div id="title"></div>
+                </div>
+                <div id="content"></div>
+            </div>
+        </div>
+    </template>
 
-	<template id="imageTemplate">
-		<div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
-			<div id="card">
-				<div id="header">
-					<div id="platform"></div>
-					<div id="avatar"></div>
-					<div id="badges"></div>
-					<div id="username">username</div>
-					<div id="pronouns"></div>
-					<div id="timestamps"></div>
-				</div>
-				<img id="image" class="chatImage" src="" />
-			</div>
-		</div>
-	</template>
+    <template id="imageTemplate">
+        <div id="messageItem" class="chatMessageItem" style="opacity: 1; transition: opacity 0.5s ease 0s;">
+            <div id="card">
+                <div id="header">
+                    <div id="platform"></div>
+                    <div id="avatar"></div>
+                    <div id="badges"></div>
+                    <div id="username">username</div>
+                    <div id="pronouns"></div>
+                    <div id="timestamps"></div>
+                </div>
+                <img id="image" class="chatImage" src="" />
+            </div>
+        </div>
+    </template>
 
-
-</body></html>
+</body>
+</html>
