@@ -1,52 +1,57 @@
-/* Estilos generales para HTML y BODY */
-html, body {
+/* Estilos generales (similares a Nutty) */
+* {
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    /* Fondo semitransparente para OBS. Puedes ajustar la transparencia (0.0 a 1.0) */
-    background-color: rgba(0, 0, 0, 0.3); 
-    font-family: 'Roboto', sans-serif; /* Usaremos Roboto, similar a Nutty */
-    color: white;
-    overflow: hidden; /* Oculta barras de desplazamiento del body */
+    box-sizing: border-box; /* Fundamental para control de tamaños */
 }
 
-/* Contenedor principal del chat */
+html, body {
+    width: 100vw; /* Utiliza el 100% del viewport width */
+    height: 100vh; /* Utiliza el 100% del viewport height */
+    overflow: hidden; /* Evita barras de desplazamiento no deseadas */
+    background: rgba(0, 0, 0, 0.3); /* Fondo semitransparente para OBS */
+    font-family: 'Roboto', sans-serif; /* Fuente Roboto */
+    color: white;
+    font-size: 30px; /* Tamaño de fuente base (Nutty usa 30px) */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Sombra para mejor lectura */
+    overflow-wrap: break-word; /* Para que las palabras largas no se salgan */
+}
+
+/* Contenedor principal del chat (similar a #mainContainer de Nutty) */
 #chat-container {
+    position: absolute; /* Posicionamiento absoluto para control total */
+    height: calc(100% - 20px); /* Ejemplo: 100% menos 20px de margen vertical */
+    width: calc(100% - 20px);  /* Ejemplo: 100% menos 20px de margen horizontal */
+    margin: 10px; /* Margen de 10px en todos los lados */
+
     display: flex;
     flex-direction: column-reverse; /* Mensajes nuevos aparecen abajo */
-    justify-content: flex-start; /* Alinea los mensajes al inicio (abajo) */
+    justify-content: flex-start; /* Alinea los mensajes al inicio (abajo) del contenedor */
     align-items: flex-start; /* Alinea los mensajes a la izquierda */
     
-    /* Dimensiones fijas para que siempre sea visible */
-    height: 600px; /* Ejemplo de altura, ajusta según tu OBS */
-    width: 400px;  /* Ejemplo de ancho, ajusta según tu OBS */
-
-    padding: 10px;
-    box-sizing: border-box; /* Incluye el padding en el tamaño final */
+    padding: 0; /* No padding directo aquí, el padding estará en los mensajes */
     overflow-y: auto; /* Permite desplazamiento si los mensajes exceden la altura */
     
     /* Colores de depuración para que veas el contenedor */
-    background-color: rgba(0, 100, 0, 0.4); /* Verde oscuro semitransparente */
-    border: 1px solid limegreen; /* Borde verde brillante */
-    border-radius: 8px; /* Bordes ligeramente redondeados */
+    background-color: rgba(0, 100, 0, 0.2); /* Verde oscuro muy tenue */
+    border: 1px dashed limegreen; /* Borde verde brillante (depuración) */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
 }
 
 /* Estilo para cada mensaje individual */
-.chat-message {
+.chat-message-item {
     margin-bottom: 8px; /* Espacio entre mensajes */
     padding: 8px 12px; /* Espacio interno del mensaje */
     border-radius: 18px; /* Bordes redondeados para burbuja de chat */
     max-width: 90%; /* Mensajes no ocupan todo el ancho, dejando espacio */
-    word-wrap: break-word; /* Rompe palabras largas para que no se desborden */
+    flex-shrink: 0; /* Importante para que no se encoja en flexbox */
     
-    /* Colores de depuración para que veas los mensajes */
     background-color: rgba(50, 50, 50, 0.8); /* Gris oscuro semitransparente */
     color: white; /* Color de texto blanco */
-    font-size: 16px;
+    font-size: 0.8em; /* Relativo al font-size del body (30px * 0.8 = 24px) */
     line-height: 1.4; /* Espaciado entre líneas */
     
-    /* Aseguramos visibilidad absoluta */
+    /* Aseguramos visibilidad absoluta por si acaso */
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
@@ -56,18 +61,24 @@ html, body {
 .username {
     font-weight: bold;
     margin-right: 5px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Sombra para mejor lectura */
 }
 
 /* Iconos de plataforma */
 .platform-icon {
-    width: 16px;
-    height: 16px;
+    width: 1em; /* Relativo al font-size del elemento padre */
+    height: 1em;
     vertical-align: middle;
     margin-right: 5px;
-    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5)); /* Sombra para icono */
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.5));
 }
 
 /* Colores de los nombres de usuario por plataforma */
 .twitch { color: #9146FF; } /* Morado de Twitch */
 .youtube { color: #FF0000; } /* Rojo de YouTube */
+
+/* Estilo para la hora (opcional, si decides añadirla) */
+.timestamp {
+    font-size: 0.7em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 5px;
+}
