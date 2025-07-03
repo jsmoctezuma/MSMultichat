@@ -1,1 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSMultichat - Panemc Chat</title>
+    <style>
+        /* Estilos básicos para el chat */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para ver a través en OBS */
+            color: white;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden; /* Oculta barras de desplazamiento si el contenido excede */
+        }
+        #chat-container {
+            display: flex;
+            flex-direction: column-reverse; /* Hace que los mensajes nuevos aparezcan abajo */
+            height: calc(100vh - 20px); /* Ajusta la altura al viewport */
+            overflow-y: auto; /* Permite desplazamiento si hay muchos mensajes */
+            padding: 10px;
+        }
+        .chat-message {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .username {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .platform-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        /* Clases para colores de plataforma (ejemplos) */
+        .twitch { color: #9146FF; }
+        .youtube { color: #FF0000; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        </div>
 
+    <script>
+        // --- Configuración ---
+        // Asegúrate que esta dirección y puerto coincidan con tu Streamer.bot WebSocket Server
+        const websocketAddress = 'ws://127.0.0.1:8080/'; // ¡IMPORTANTE! Revisa tu puerto en Streamer.bot
+        const maxMessages = 50; // Límite de mensajes a mostrar para evitar sobrecarga
+
+        let ws; // Variable para la conexión WebSocket
+
+        function connectWebSocket() {
+            ws = new WebSocket(websocketAddress);
+
+            ws.onopen = () => {
+                console.log('Conectado a Streamer.bot WebSocket');
+                // Opcional: Solicitar información al conectarse
+                // ws.send(JSON.stringify({ request: 'GetInfo' }));
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                // console.log('Mensaje de Streamer.bot:', data); // Para depuración
+
+                // Verificamos si es un mensaje de chat
+                if (data.event && data.event.type === 'Twitch' && data.event.source === 'ChatMessage') {
+                    displayMessage(data.data.displayName, data.data.message, 'Twitch');
+                }
+                // TODO: Aquí agregaremos la lógica para YouTube, Kick y TikTok
+                // Cuando tengamos la integración de YouTube con Streamer.bot,
+                // buscaríamos 'YouTube' en data.event.type.
+            };
+
+            ws.onclose = () => {
+                console.log('Desconectado de Streamer.bot WebSocket. Reintentando en 5 segundos...');
+                setTimeout(connectWebSocket, 5000); // Intenta reconectar después de 5 segundos
+            };
+
+            ws.onerror = (error) => {
+                console.error('Error en WebSocket:', error);
+                ws.close(); // Cierra la conexión para que onclose intente reconectar
+            };
+        }
+
+        function displayMessage(username, message, platform) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+
+            // Añadir un icono de plataforma (puedes reemplazar con imágenes reales)
+            let iconHtml = '';
+            let platformClass = '';
+            if (platform === 'Twitch') {
+                iconHtml = '<span class="platform-icon">🟣</span>'; // Emoticono temporal, reemplaza por imagen
+                platformClass = 'twitch';
+            } else if (platform === 'YouTube') {
+                iconHtml = '<span class="platform-icon">🔴</span>'; // Emoticono temporal
+                platformClass = 'youtube';
+            }
+            // TODO: Agregar iconos para Kick y TikTok
+
+            messageElement.innerHTML = `
+                ${iconHtml}
+                <span class="username ${platformClass}">${username}:</span>
+                <span>${message}</span>
+            `;
+
+            chatContainer.prepend(messageElement); // Agrega el mensaje al principio (aparecerá abajo por flex-direction: column-reverse)
+
+            // Limitar el número de mensajes
+            while (chatContainer.children.length > maxMessages) {
+                chatContainer.removeChild(chatContainer.lastChild);
+            }
+        }
+
+        // Iniciar la conexión cuando la página cargue
+        window.onload = connectWebSocket;
+    </script>
+</body>
+</html>
