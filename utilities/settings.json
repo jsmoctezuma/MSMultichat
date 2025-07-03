@@ -1,0 +1,314 @@
+{
+  "settings": [
+    {
+      "group": "Streamer.bot Connection",
+      "settings": [
+        {
+          "label": "Streamer.bot Address",
+          "name": "address",
+          "type": "textInput",
+          "defaultValue": "127.0.0.1",
+          "placeholder": "e.g., 127.0.0.1"
+        },
+        {
+          "label": "Streamer.bot Port",
+          "name": "port",
+          "type": "numberInput",
+          "defaultValue": "8080",
+          "min": 1,
+          "max": 65535,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "group": "General Display Options",
+      "settings": [
+        {
+          "label": "Show Platform Icon",
+          "name": "showPlatform",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Avatar",
+          "name": "showAvatar",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Username",
+          "name": "showUsername",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Message Content",
+          "name": "showMessage",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Timestamps",
+          "name": "showTimestamps",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Badges",
+          "name": "showBadges",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Pronouns",
+          "name": "showPronouns",
+          "type": "toggle",
+          "defaultValue": false
+        },
+        {
+          "label": "Font Family",
+          "name": "font",
+          "type": "textInput",
+          "defaultValue": "",
+          "placeholder": "e.g., 'Roboto Condensed', sans-serif"
+        },
+        {
+          "label": "Font Size (px)",
+          "name": "fontSize",
+          "type": "numberInput",
+          "defaultValue": "30",
+          "min": 10,
+          "max": 100,
+          "step": 1
+        },
+        {
+          "label": "Line Spacing (em)",
+          "name": "lineSpacing",
+          "type": "numberInput",
+          "defaultValue": "1.7",
+          "min": 0.5,
+          "max": 5.0,
+          "step": 0.1
+        },
+        {
+          "label": "Background Color",
+          "name": "background",
+          "type": "colorInput",
+          "defaultValue": "#000000"
+        },
+        {
+          "label": "Background Opacity",
+          "name": "opacity",
+          "type": "numberInput",
+          "defaultValue": "0.85",
+          "min": 0.0,
+          "max": 1.0,
+          "step": 0.05
+        },
+        {
+          "label": "Hide Messages After (seconds, 0 for never)",
+          "name": "hideAfter",
+          "type": "numberInput",
+          "defaultValue": "0",
+          "min": 0,
+          "step": 1
+        },
+        {
+          "label": "Exclude Commands",
+          "name": "excludeCommands",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Ignore Chatters (comma-separated)",
+          "name": "ignoreChatters",
+          "type": "textInput",
+          "defaultValue": "",
+          "placeholder": "e.g., botname, spammer"
+        },
+        {
+          "label": "Scroll Direction",
+          "name": "scrollDirection",
+          "type": "select",
+          "defaultValue": "1",
+          "options": [
+            { "label": "Bottom to Top", "value": "1" },
+            { "label": "Top to Bottom", "value": "0" }
+          ]
+        },
+        {
+          "label": "Group Consecutive Messages",
+          "name": "groupConsecutiveMessages",
+          "type": "toggle",
+          "defaultValue": false
+        },
+        {
+          "label": "Inline Chat (Experimental)",
+          "name": "inlineChat",
+          "type": "toggle",
+          "defaultValue": false
+        },
+        {
+          "label": "Image Embed Min Permission Level",
+          "name": "imageEmbedPermissionLevel",
+          "type": "numberInput",
+          "defaultValue": "20",
+          "min": 0,
+          "max": 100,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "group": "Twitch Filters",
+      "settings": [
+        {
+          "label": "Show Twitch Messages",
+          "name": "showTwitchMessages",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Twitch Announcements",
+          "name": "showTwitchAnnouncements",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Twitch Subs",
+          "name": "showTwitchSubs",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Twitch Channel Point Redemptions",
+          "name": "showTwitchChannelPointRedemptions",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Twitch Raids",
+          "name": "showTwitchRaids",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Twitch Shared Chat Display",
+          "name": "showTwitchSharedChat",
+          "type": "select",
+          "defaultValue": "2",
+          "options": [
+            { "label": "None", "value": "0" },
+            { "label": "Chat Message Only", "value": "1" },
+            { "label": "Chat Message + Alert", "value": "2" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "YouTube Filters",
+      "settings": [
+        {
+          "label": "Show YouTube Messages",
+          "name": "showYouTubeMessages",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show YouTube Super Chats",
+          "name": "showYouTubeSuperChats",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show YouTube Super Stickers",
+          "name": "showYouTubeSuperStickers",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show YouTube Memberships",
+          "name": "showYouTubeMemberships",
+          "type": "toggle",
+          "defaultValue": true
+        }
+      ]
+    },
+    {
+      "group": "Donation Filters",
+      "settings": [
+        {
+          "label": "Show Streamlabs Donations",
+          "name": "showStreamlabsDonations",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show StreamElements Tips",
+          "name": "showStreamElementsTips",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Patreon Memberships",
+          "name": "showPatreonMemberships",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Ko-fi Donations",
+          "name": "showKofiDonations",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show TipeeeStream Donations",
+          "name": "showTipeeeStreamDonations",
+          "type": "toggle",
+          "defaultValue": true
+        },
+        {
+          "label": "Show Fourthwall Alerts",
+          "name": "showFourthwallAlerts",
+          "type": "toggle",
+          "defaultValue": true
+        }
+      ]
+    },
+    {
+      "group": "Miscellaneous",
+      "settings": [
+        {
+          "label": "Furry Mode (Replaces 's' with 'f')",
+          "name": "furryMode",
+          "type": "toggle",
+          "defaultValue": false
+        }
+      ]
+    },
+    {
+      "group": "Configuration Actions",
+      "settings": [
+        {
+          "label": "Load URL Parameters",
+          "name": "loadUrlButton",
+          "type": "button",
+          "action": "OpenLoadURLPopup"
+        },
+        {
+          "label": "Load Defaults",
+          "name": "loadDefaultsButton",
+          "type": "button",
+          "action": "OpenLoadDefaultsPopup"
+        },
+        {
+          "label": "Import/Export Settings",
+          "name": "loadSettingsButton",
+          "type": "button",
+          "action": "OpenLoadSettingsPopup"
+        }
+      ]
+    }
+  ]
+}
